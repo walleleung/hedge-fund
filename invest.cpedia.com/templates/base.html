@@ -2,40 +2,31 @@
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <!-- chec.kli.st: http://code.google.com/p/checklist created by cpedia: http://blog.cpedia.com -->
-    <meta name="keywords" content="chcklist,checklist.cc,appengine,python,django,free,open source,cpedia" />
-    <meta name="description" content="Manage your checklist on http://check.kli.st" />
+    <!-- invest.cpedia.com: http://code.google.com/p/hedge-fund created by cpedia: http://blog.cpedia.com -->
+    <meta name="keywords" content="investpedia,investcpedia,invest.cpedia.com,invest,invest dictionary" />
+    <meta name="description" content="Invest dictionary supplied by http://invest.cpedia.com" />
     <meta name="author" content="cpedia, Ping Chen, http://blog.cpedia.com" />
-    <meta name="copyright" content="2008 http://cpedia.com" />
+    <meta name="copyright" content="2009 http://invest.cpedia.com" />
     <title>{% block title %}{{title}}{% endblock %}</title>
     {% block header %}
     {% endblock %}    
-    <link rel="alternate" type="application/atom+xml" title="{{ DEAL.title }}" href="{{ DEAL.root_url }}/atom" />
-    <link rel="stylesheet" href="/static/stylesheets/deal.css" type="text/css" />    
-    <!-- yui -->
+    <link rel="stylesheet" href="/static/stylesheets/dict.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.7.0/build/reset-fonts-grids/reset-fonts-grids.css" />
     <script type="text/javascript" src="http://yui.yahooapis.com/2.7.0/build/yahoo/yahoo-min.js" ></script>
     <script type="text/javascript" src="http://yui.yahooapis.com/2.7.0/build/yahoo-dom-event/yahoo-dom-event.js"></script>
-    <script type="text/javascript" src="/static/jscripts/deals.js"></script>
 </head>
 <body class="yui-skin-sam">
 <div id="doc2" class="yui-t1">
     <div id="hd">
         {% include "base_top.html" %}
-        {% if msg %}<div class="msg moz-border">{{msg}}</div>{% endif %}
     </div>
     <br>
     <div id="bd">
         <div id="yui-main">
-            <div class="yui-b">
-                <div class="yui-g">
-                        {% block deals %}
-                        {% endblock %}
-                </div>
+            <div class="yui-g">
+                    {% block dict %}
+                    {% endblock %}
             </div>
-        </div>
-        <div class="yui-b">
-            {% include "navigator.html" %}
         </div>
     </div>
     <div id="ft">

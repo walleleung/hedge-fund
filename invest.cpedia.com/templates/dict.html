@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block title %}{{title}} - Online invest dictionary{% endblock %}
+{% block dict %}
+<script type="text/javascript" src="http://yui.yahooapis.com/2.7.0/build/json/json-min.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.7.0/build/connection/connection-min.js"></script>
+<script type="text/javascript">
+
+</script>
+<div style="text-align:center;">
+<input type="text" name="search_term" id="search_term" style="width:300px">
+<input type="button" value="Search">
+<div id="result">
+    
+</div>
+</div>
+{% endblock %}
+

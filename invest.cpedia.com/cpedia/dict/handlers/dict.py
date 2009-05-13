@@ -79,11 +79,10 @@ class UnauthorizedHandler(webapp.RequestHandler):
         view.ViewPage(cache_time=36000).render(self,"unauthorized.html")
 
 class MainPage(BaseRequestHandler):
-    @authorized.role("admin")
     def get(self):
         user = users.get_current_user()
         template_values = {
         }
-        self.generate('deals.html',template_values)
+        self.generate('dict.html',template_values)
 
 

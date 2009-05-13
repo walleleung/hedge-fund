@@ -26,12 +26,7 @@
 }
 
 #footer {
-    background: #fbfaf4;
-    height: 3.5em;
-    margin-bottom: 20px;
     margin-top: 20px;
-    min-width: 750px;
-    overflow: hidden;
     text-align: center;
     line-height: 1.5em;
 }

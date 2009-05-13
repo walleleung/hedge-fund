@@ -49,8 +49,8 @@ class ViewPage(object):
                 url = users.create_login_url(handler.request.uri)
 
             template_params = {
-                "DEAL": config.DEAL,
-                "title": config.DEAL['title'],
+                "DICT": config.DICT,
+                "title": config.DICT['title'],
                 'user': users.get_current_user(),
                 'sign_url': url,
                 'request': handler.request,
