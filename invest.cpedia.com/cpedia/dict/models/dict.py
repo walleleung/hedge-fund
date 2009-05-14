@@ -69,23 +69,38 @@ class Tagable(models.MemcachedModel):
 
     tags_commas = property(get_tags,set_tags)
 
-class Deals(models.MemcachedModel):
-    vendor = db.StringProperty(multiline=False)
-    title = db.StringProperty()
-    content = db.TextProperty()
-    image = db.StringProperty()
-    pub_date = db.StringProperty() #pub date from vendor. '%b %d %Y'
-    expired = db.BooleanProperty(default = False)
-    created_date_str = db.StringProperty()
+class Terms(models.MemcachedModel):
+    alphabetical = db.StringProperty() #a-z
+    term = db.StringProperty(multiline=False)
+    term_lowercase = db.StringProperty(multiline=False)
+    term_url_quote = db.StringProperty(multiline=False)
+    explains = db.StringProperty()
+    investopedia_explains = db.StringProperty()
     created_date = db.DateTimeProperty(auto_now_add=True)
     last_updated_date = db.DateTimeProperty(auto_now=True)
     last_updated_user = db.UserProperty(auto_current_user=True)
 
     def put(self):
-        date_ = self.created_date.strftime('%b %d %Y') # July 2008
-        self.created_date_str = date_
-        super(Deals, self).put()
+        self.term_lowercase = self.term.lower()
+        super(Terms, self).put()
 
+class SearchHistory(models.MemcachedModel):
+    user = db.UserProperty(required=True,auto_current_user_add=True)
+    user_id = db.StringProperty(multiline=False)
+    term = db.StringProperty(multiline=False)
+    term_url_quote = db.StringProperty(multiline=False)
+    created_date = db.DateTimeProperty(auto_now_add=True)
+
+class UserNewWords(models.MemcachedModel):
+    user_id = db.StringProperty(multiline=False)
+    term = db.StringProperty(multiline=False)
+    term_lowercase = db.StringProperty(multiline=False)
+    term_url_quote = db.StringProperty(multiline=False)
+    created_date = db.DateTimeProperty(auto_now_add=True)
+
+    def put(self):
+        self.term_lowercase = self.term.lower()
+        super(UserNewWords, self).put()
 
 class Comment(models.MemcachedModel):
     user = db.UserProperty(required=True,auto_current_user_add=True)
@@ -94,7 +109,8 @@ class Comment(models.MemcachedModel):
     created_date = db.DateTimeProperty(auto_now_add=True)
     last_updated_date = db.DateTimeProperty(auto_now=True)
     last_updated_user = db.UserProperty()
-
+    term = db.ReferenceProperty(Terms)
+    
     def put(self):
         self.user_id = self.user.user_id()
         super(Comment, self).put()

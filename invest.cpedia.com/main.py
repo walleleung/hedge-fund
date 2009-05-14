@@ -45,6 +45,7 @@ def main():
                     ('/json/([-\w\.]+)/*$', rpc.RPCHandler),
                     ('/403.html', dict.UnauthorizedHandler),
                     ('/404.html', dict.NotFoundHandler),
+                    ('/tasks/getterms/*$', dict.GetTermsJob),
                     ('/*$', dict.MainPage),
                     ],
                     debug=config.DEBUG)

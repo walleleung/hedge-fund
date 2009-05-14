@@ -13,7 +13,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-import BeautifulSoup
+import BeautifulSoup import BeautifulSoup
 
 __author__ = 'Ping Chen'
 
@@ -85,4 +85,61 @@ class MainPage(BaseRequestHandler):
         }
         self.generate('dict.html',template_values)
 
+class GetTermsJob(BaseRequestHandler):
+    def get(self):
+    #if self.get("X-AppEngine-Cron")=="true":
+        try:
+            terms_page = urlfetch.fetch(
+                    url="http://www.investopedia.com/terms/1/?viewed=1",
+                    method=urlfetch.GET,
+                    headers={'Content-Type': 'text/html; charset=UTF-8'}
+                    )
+            terms = []
+            if terms_page.status_code == 200:
+                term_soap = BeautifulSoup(terms_page.content)
+                term_span = term_soap.find("span",id="Span1")
+                links = term_span.findAll("a")
+                for link in links:
+                    term = models.Terms(alphabetical="#")                    
+                    term.content = utils.utf82uni(term_a.prettify().replace("[\n]",""))
+                    terms+=[term]
+            current_date = datetime.datetime.now().strftime('%b %d %Y')
+            latest_deals = []
+            for deal in terms:
+                deal_ = models.Deals.gql('where created_date_str =:1 and title =:2',current_date,deal.title).fetch(10)
+                if deal_ and len(deal_) > 0:
+                    break
+                else:
+                    latest_deals += [deal]
+            for latest_deal in reversed(latest_deals):
+                latest_deal.created_date = datetime.datetime.now()   #unaccuracy for the auto_now_add
+                latest_deal.put()
+            template_values = {
+            "msg":"Generate latest deals from dealsea.com successfully.",
+            }
+        except Exception, exception:
+            mail.send_mail(sender="deal.checklist.cc <cpedia@checklist.cc>",
+                           to="Ping Chen <cpedia@gmail.com>",
+                           subject="Something wrong with the Deal Generation Job.",
+                           body="""
+Hi Ping,
 
+Something wroing with the Deal Generation Job.
+
+Below is the detailed exception information:
+%s
+
+Please access app engine console to resolve the problem.
+http://appengine.google.com/a/checklist.cc
+
+Sent from deal.checklist.cc
+            """ % traceback.format_exc())
+
+            template_values = {
+            "msg":"Generate latest deals from dealsea.com unsuccessfully. An alert email sent out.<br>" + traceback.format_exc(),
+            }
+
+        self.generate('dict.html',template_values)
+
+    def post(self):
+        self.get()
