@@ -45,7 +45,6 @@
     text-align: right;
 }
 .msg{
-    white-space: nowrap;
     padding: 2px; 
     font-size: 0.9em;
     background-color:rgb(221, 248, 204);
