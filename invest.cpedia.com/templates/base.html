@@ -19,6 +19,19 @@
 <div id="doc2" class="yui-t1">
     <div id="hd">
         {% include "base_top.html" %}
+        {% if user_is_admin %}
+        <div style="text-align:center;">
+            <a href="/tasks/getterms/1/">#</a> | <a href="/tasks/getterms/a/">A</a> | <a href="/tasks/getterms/b/">B</a> | <a
+                href="/tasks/getterms/c/">C</a> | <a href="/tasks/getterms/d/">D</a> | <a href="/tasks/getterms/e/">E</a> | <a
+                href="/tasks/getterms/f/">F</a> | <a href="/tasks/getterms/g/">G</a> | <a href="/tasks/getterms/h/">H</a> | <a
+                href="/tasks/getterms/i/">I</a> | <a href="/tasks/getterms/j/">J</a> | <a href="/tasks/getterms/k/">K</a> | <a
+                href="/tasks/getterms/l/">L</a> | <a href="/tasks/getterms/m/">M</a> | <a href="/tasks/getterms/n/">N</a> | <a
+                href="/tasks/getterms/o/">O</a> | <a href="/tasks/getterms/p/">P</a> | <a href="/tasks/getterms/q/">Q</a> | <a
+                href="/tasks/getterms/r/">R</a> | <a href="/tasks/getterms/s/">S</a> | <a href="/tasks/getterms/t/">T</a> | <a
+                href="/tasks/getterms/u/">U</a> | <a href="/tasks/getterms/v/">V</a> | <a href="/tasks/getterms/w/">W</a> |
+            <a href="/tasks/getterms/x/">X</a> | <a href="/tasks/getterms/y/">Y</a> | <a href="/tasks/getterms/z/">Z</a>
+        </div>
+        {% endif %}
         {% if msg %}<div class="msg moz-border">{{msg}}</div>{% endif %}
     </div>
     <br>

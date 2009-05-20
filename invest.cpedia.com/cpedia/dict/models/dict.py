@@ -69,8 +69,21 @@ class Tagable(models.MemcachedModel):
 
     tags_commas = property(get_tags,set_tags)
 
+class Category(models.MemcachedModel):
+    category = db.StringProperty(multiline=False)
+    category_lowercase = db.StringProperty(multiline=False)
+    category_url_quote = db.StringProperty(multiline=False)
+    created_date = db.DateTimeProperty(auto_now_add=True)
+    last_updated_date = db.DateTimeProperty(auto_now=True)
+    last_updated_user = db.UserProperty(auto_current_user=True)
+
+    def put(self):
+        self.category_lowercase = self.category.lower()
+        super(Category, self).put()
+
 class Terms(models.MemcachedModel):
     alphabetical = db.StringProperty() #a-z
+    category = db.StringProperty()
     term = db.StringProperty(multiline=False)
     term_lowercase = db.StringProperty(multiline=False)
     term_url_quote = db.StringProperty(multiline=False)

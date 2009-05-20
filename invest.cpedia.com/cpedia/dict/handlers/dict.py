@@ -83,8 +83,11 @@ class BaseRequestHandler(webapp.RequestHandler):
                     term = models.Terms(alphabetical="#")
                     term.term = utils.utf82uni(str(link.contents[0]))
                     url_quote = link.get("href").replace(".asp","").replace("/terms/","").split("/")
-                    term.alphabetical = url_quote[0]
-                    term.term_url_quote = url_quote[1]
+                    url_quote_len = len(url_quote)
+                    if url_quote_len > 2:
+                        term.category = url_quote[0]
+                    term.alphabetical = url_quote[url_quote_len-2]
+                    term.term_url_quote = url_quote[url_quote_len-1]
                     term_ = models.Terms.gql('where term_url_quote =:1',term.term_url_quote).fetch(10)
                     if term_ and len(term_) > 0:
                         pass
@@ -119,6 +122,57 @@ Sent from invest.cpedia.com
 
         self.generate('dict.html',template_values)
 
+    def generate_category(self):
+        try:
+            terms_page = urlfetch.fetch(
+                    url="http://www.investopedia.com/dictionary/default.asp?viewed=1",
+                    method=urlfetch.GET,
+                    headers={'Content-Type': 'text/html; charset=UTF-8'}
+                    )
+            categories = []
+            if terms_page.status_code == 200:
+                term_soap = BeautifulSoup(terms_page.content)
+                term_span = term_soap.find("div",attrs={"class":"dictionarycategories"})
+                links = term_span.findAll("a")
+                for link in links:
+                    category = models.Category()
+                    category.category = utils.utf82uni(str(link.contents[0]))
+                    url_quote = link.get("href").replace(".asp","").replace("/categories/","")
+                    category.category_url_quote = url_quote
+                    category_ = models.Category.gql('where category_url_quote =:1',url_quote).fetch(10)
+                    if category_ and len(category_) > 0:
+                        pass
+                    else:
+                        categories+=[category]
+            for category in reversed(categories):
+                category.put()
+            template_values = {
+            "msg":"Generate dictionary categories from investopedia.com successfully.",
+            }
+        except Exception, exception:
+            mail.send_mail(sender="invest.cpedia.com <cpedia@gmail.com>",
+                           to="Ping Chen <cpedia@gmail.com>",
+                           subject="Something wrong with the dictionary categories Generation Job.",
+                           body="""
+Hi Ping,
+
+Something wroing with the dictionary categories Generation Job.
+
+Below is the detailed exception information:
+%s
+
+Please access app engine console to resolve the problem.
+http://appengine.google.com/a/cpedia.com
+
+Sent from invest.cpedia.com
+            """ % traceback.format_exc())
+
+            template_values = {
+            "msg":"Generate dictionary categories from investopedia.com unsuccessfully. An alert email sent out.<br>" + traceback.format_exc(),
+            }
+
+        self.generate('dict.html',template_values)
+
 
 class NotFoundHandler(webapp.RequestHandler):
     def get(self):
@@ -149,4 +203,9 @@ class GetTermsJobAtoZ(BaseRequestHandler):
     def get(self,alphabetical):
     #if self.get("X-AppEngine-Cron")=="true":
          self.generate_dictionary(alphabetical)
+
+class GetCategories(BaseRequestHandler):
+    def get(self):
+    #if self.get("X-AppEngine-Cron")=="true":
+         self.generate_category()
 

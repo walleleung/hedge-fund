@@ -1,4 +1,0 @@
-cron:
-- description: Fetch dict information from investopedia.com
-  url: /tasks/getdeals
-  schedule: every 5 minutes  
