@@ -47,7 +47,7 @@ def main():
                     ('/404.html', dict.NotFoundHandler),
                     ('/tasks/getterms/*$', dict.GetTermsJob),
                     ('/tasks/getterms/([-\w\.]+)/*$', dict.GetTermsJobAtoZ),
-                    ('/tasks/getcategories/([-\w\.]+)/*$', dict.GetCategories),
+                    ('/tasks/getcategories/*$', dict.GetCategories),
                     ('/*$', dict.MainPage),
                     ],
                     debug=config.DEBUG)
